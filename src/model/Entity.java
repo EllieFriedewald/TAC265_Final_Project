@@ -1,36 +1,23 @@
 package model;
 
+import java.util.*;
+
 public abstract class Entity {
-    private String name;
-    private int health;
-    private int[] position;
-    private int x;
+    private String name; // username in player
+    private double health;
 
-    public int getY() {
-        return y;
-    }
 
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    private int y;
-
-    public Entity(String name, int health, int[] position) {
+    public Entity(String name, double health) {
         this.name = name;
         this.health = health;
-        this.position = position;
     }
 
-    public abstract void move(String direction);
+    public Entity(String name) {
+        health = 10.0;
+        this.name = name;
+    }
+
+    public abstract List<Item> dropItem();
 
     public String getName() {
         return name;
@@ -40,7 +27,7 @@ public abstract class Entity {
         this.name = name;
     }
 
-    public int getHealth() {
+    public double getHealth() {
         return health;
     }
 
@@ -48,12 +35,8 @@ public abstract class Entity {
         this.health = health;
     }
 
-    public int[] getPosition() {
-        return position;
+    @Override
+    public String toString() {
+        return name + " has " + health + " hearts";
     }
-
-    public void setPosition(int[] position) {
-        this.position = position;
-    }
-
 }
