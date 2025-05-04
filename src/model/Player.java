@@ -4,23 +4,30 @@ import java.util.*;
 
 public class Player extends Entity {
     private List<Item> inventory;
-    private Map<ToolType, Tool> tools;
+    private List<Tool> tools;
     private String username;
     private String level;
     private String password;
     private int numPlots;
+    private int selectedToolindx;
 
     public Player(String username, String password, String level, int numPlots, double health) {
         super(username, health);
         this.password = password;
         this.level = level;
         this.numPlots = numPlots;
+        this.inventory = new ArrayList<>();
+        this.tools = new ArrayList<>();
+        this.selectedToolindx = 0;
     }
 
     public Player(String name, String password, int numPlots) {
         super(name);
         this.password = password;
         this.numPlots = numPlots;
+        this.inventory = new ArrayList<>();
+        this.tools = new ArrayList<>();
+        this.selectedToolindx = 0;
     }
 
     public String getPassword() {
@@ -45,12 +52,18 @@ public class Player extends Entity {
     public List<Item> getInventory() {
         return inventory;
     }
+    public Tool getSelectedTool(){
+        if(selectedToolindx >= 0 && selectedToolindx < tools.size()){
+            return tools.get(selectedToolindx);
+        }
+        return null;
+    }
 
     /*
     This is for when the players get killed so that they drop their inventory because keepInventory = false;
      */
     public List<Item> dropItem() {
-        return inventory; // potentially wanna clear the players inventory too, I may need an update method
+        return inventory; // potentially want to clear the players inventory too, I may need an update method
     }
 
     @Override
