@@ -26,6 +26,17 @@ public abstract class WorldObject {
         this.description = description;
     }
 
+    public WorldObject(String name, boolean canPickUp){
+        this.name = name;
+        this.canPickUp = canPickUp;
+    }
+    public WorldObject(String name, String description){
+        this(name, true, description);
+    }
+    public WorldObject(String name){
+        this(name, true, "A mysterious item...");
+    }
+
     public abstract void interact(Player player);
 
     public String getName() {

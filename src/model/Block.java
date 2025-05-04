@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class Block extends WorldObject {
     private boolean isBreakable;
     private Tool tool;
@@ -22,14 +24,26 @@ public class Block extends WorldObject {
         return super.getName();
     }
 
-    public void interact(Player player,Block block) {
-        if(block.isBreakable()) {
-            Tool playerTool = player.getSelectedTool();
-            if(playerTool != null && playerTool.getType().equals(block.getTool())){
-                System.out.println("You broke " + block);
-            }
+    @Override
+    public void interact(Player player) {
+        Tool playerTool = player.getSelectedTool();
+        if(isBreakable && playerTool != null && playerTool.getType().equals(tool.getType())) {
+            System.out.println("You broke " + getName() + " with a " + playerTool.getType());
+        }
+        else {
+            System.out.println("you couldn't brake " + getName() + " because you have a " + playerTool.getType());
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Block block = (Block) o;
+        return isBreakable == block.isBreakable && Objects.equals(tool, block.tool);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(isBreakable, tool);
+    }
 }
