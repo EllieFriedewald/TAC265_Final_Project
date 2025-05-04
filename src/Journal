@@ -1,8 +1,11 @@
 Wednesday 04/10/2025 -
     spent ~30 minutes drawing my UML diagram and coming up with broad categories of what the game (copy of Minecraft) would potentially run like. Next time: I would like to finalize my UML so that it has all of the instance variable and create my run menu.
 
-Thursday 05/201/2025 -
+Thursday 05/01/2025 -
     I spent the second half of class today finalizing my run program for the game and kind of allocating all of my variables to the classes (figuring out logistics so i can just code. I finished the POJO of Player, Mob, and Entity (adding the abstract method- dropItem()).
 
     Next time:
-    I would love to finalize my Entity hierarchy.
+    I would love to finalize my Entity & WorldObject hierarchy.
+
+Sunday 05/04/25 -
+    What I want to accomplish is my hierarchies being compelete and my interfaces.
