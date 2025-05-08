@@ -10,11 +10,13 @@ public class Main {
     private Player loggedInPlayer;
     private UI ui;
     private Map<String, Player> playerMap;
+    private Map<String, Item> itemMap;
 
     private static final String DB_FILE = "playerDatabase.ser";
 
     public Main(){
         playerMap = PlayerDatabaseSaver.readInDatabaseFromFile(DB_FILE);
+        itemMap = (Map<String, Item>) ItemFileReader.readItems();
         loggedInPlayer = null;
         ui = new MyIO();
     }
@@ -129,6 +131,52 @@ public class Main {
             counter++;
         }
         ui.println(acc);
+    }
+
+    private BlockType getRandomBlockType(){
+        List<BlockType> blockWeights = new ArrayList<>();
+        for(BlockType type : BlockType.values()){
+            for(int i = 0; i < type.getWeight(); i++){
+                blockWeights.add(type);
+            }
+        }
+        int randInx = new Random().nextInt(blockWeights.size());
+        return blockWeights.get(randInx);
+    }
+
+    private Map<BlockType, List<Item>> getItemDropByBlockType(){
+        ArrayList<Item> items = ItemFileReader.readItems();
+        Map<BlockType, List<Item>> dropMap = new HashMap<>();
+        for(Item item : items){
+            BlockType block = item.getDropSource();
+            dropMap.putIfAbsent(block, new ArrayList<>());
+            dropMap.get(block).add(item);
+        }
+        return dropMap;
+    }
+
+    private Item getItemDrop(BlockType sourceBlock){
+        List<Item> items = new ArrayList<>();
+        for(Item item : itemMap.values()){
+            if(item.getDropSource() == sourceBlock){
+                items.add(item);
+            }
+        }
+        if(items.isEmpty()){
+            return null;
+        }
+        int randInx = new Random().nextInt(items.size());
+        return items.get(randInx);
+    }
+
+    private void mineBlock(){
+        BlockType minedBlock = getRandomBlockType();
+        Item loot = getItemDrop(minedBlock);
+        ui.println("You found and mined a " + minedBlock + " block!");
+        if(loot != null){
+            loggedInPlayer.addToInventory(loot);
+            ui.println("From mining the " + minedBlock + " you get: " + loot.toString());
+        }
     }
 
 }

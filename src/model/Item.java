@@ -3,16 +3,22 @@ package model;
 import java.util.*;
 
 public class Item extends WorldObject {
-//    private String description;
+    private String from;
+    private final BlockType dropSource;
 
-    public Item(String name, boolean canPickUp, String description) {
+    public Item(String name, boolean canPickUp, String description, String from) {
         super(name, canPickUp, description);
+        this.dropSource = BlockType.valueOf(from.toUpperCase());
     }
     public Item(String name, boolean canPickUp) {
-        super(name, canPickUp, "A mysterious item...");
+        this(name, canPickUp, "A mysterious item...", "Dont know where from");
     }
     public Item(String name) {
-        super(name, true, "A mysterious item...");
+        this(name, true, "A mysterious item...", "Dont know where from");
+    }
+
+    public BlockType getDropSource() {
+        return dropSource;
     }
 
     @Override

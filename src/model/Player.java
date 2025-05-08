@@ -67,6 +67,10 @@ public class Player extends Entity implements Serializable {
         return inventory; // potentially want to clear the players inventory too, I may need an update method
     }
 
+    public void addToInventory(Item loot) {
+        inventory.add(loot);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
