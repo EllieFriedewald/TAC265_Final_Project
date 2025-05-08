@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Player extends Entity {
+public class Player extends Entity implements Serializable {
     private List<Item> inventory;
     private List<Tool> tools;
     private String username;
