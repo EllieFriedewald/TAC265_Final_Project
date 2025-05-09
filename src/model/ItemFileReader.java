@@ -1,21 +1,21 @@
 package model;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class ItemFileReader {
+    private static final Map<String, Item> itemMap = new HashMap<>();
     private static final String ITEM_FILE_NAME = "itemFile.txt";
-    public static ArrayList<Item> readItems() {
-        ArrayList<Item> items = new ArrayList<>();
+    public static Map<String, Item> readItems() {
         try(FileInputStream fis = new FileInputStream(ITEM_FILE_NAME); Scanner scan = new Scanner(fis)){
             scan.nextLine();
             while(scan.hasNextLine()) {
                 String line = scan.nextLine();
                 if(!line.isEmpty()) {
                     Item drops = parseLine(line);
-                    items.add(drops);
+                    if(drops != null) {
+                        itemMap.put(drops.getName(), drops);
+                    }
                 }
             }
         }
@@ -23,7 +23,7 @@ public class ItemFileReader {
             System.err.println("File not found...");
             System.exit(1);
         }
-        return items;
+        return itemMap;
     }
     //String name, boolean canPickUp, String description
     private static Item parseLine(String line){
@@ -38,5 +38,9 @@ public class ItemFileReader {
         String description = ls.next();
         String from = ls.next();
         return new Item(name, canPickUp, description, from);
+    }
+
+    public static Item getItemByName(String name){
+        return itemMap.get(name);
     }
 }

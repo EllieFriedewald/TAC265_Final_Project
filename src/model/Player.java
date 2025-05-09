@@ -4,20 +4,21 @@ import java.io.Serializable;
 import java.util.*;
 
 public class Player extends Entity implements Serializable {
-    private List<Item> inventory;
+    private Map<String, Integer> inventory;
     private List<Tool> tools;
     private String username;
-    private String level;
+    private PlayerLevel level;
     private String password;
     private int numPlots;
+    private Plot plot;
     private int selectedToolindx;
 
-    public Player(String username, String password, String level, int numPlots, double health) {
+    public Player(String username, String password, PlayerLevel level, int numPlots, double health) {
         super(username, health);
         this.password = password;
         this.level = level;
         this.numPlots = numPlots;
-        this.inventory = new ArrayList<>();
+        this.inventory = new HashMap<>();
         this.tools = new ArrayList<>();
         this.selectedToolindx = 0;
     }
@@ -25,8 +26,9 @@ public class Player extends Entity implements Serializable {
     public Player(String name, String password, int numPlots) {
         super(name);
         this.password = password;
+        level = PlayerLevel.LEATHER;
         this.numPlots = numPlots;
-        this.inventory = new ArrayList<>();
+        this.inventory = new HashMap<>();
         this.tools = new ArrayList<>();
         this.selectedToolindx = 0;
     }
@@ -37,10 +39,10 @@ public class Player extends Entity implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    public String getLevel() {
+    public PlayerLevel getLevel() {
         return level;
     }
-    public void setLevel(String level) {
+    public void setLevel(PlayerLevel level) {
         this.level = level;
     }
     public int getNumPlots() {
@@ -50,7 +52,32 @@ public class Player extends Entity implements Serializable {
         this.numPlots = numPlots;
     }
 
-    public List<Item> getInventory() {
+    public void addItem(Item item) {
+        inventory.put(item.getName(), inventory.getOrDefault(item.getName(), 0) + 1);
+    }
+
+    public boolean removeItem(List<Item> items) {
+        for(Item item : items){
+            if(!inventory.containsKey(item.getName()) || inventory.get(item.getName()) == 0){
+                return false; // not enough of this item then cant craft
+            }
+        }
+        for(Item item : items){
+            inventory.put(item.getName(), inventory.get(item.getName()) - 1);
+        }
+        return true;
+    }
+
+    public boolean hasEnoughItems(Recipe recipe) {
+        for(Item ingredient: recipe.getIngredients()){
+            if(!inventory.containsKey(ingredient.getName()) || inventory.get(ingredient.getName()) == 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Map<String, Integer> getInventory() {
         return inventory;
     }
     public Tool getSelectedTool(){
@@ -59,16 +86,27 @@ public class Player extends Entity implements Serializable {
         }
         return null;
     }
-
     /*
     This is for when the players get killed so that they drop their inventory because keepInventory = false;
      */
     public List<Item> dropItem() {
-        return inventory; // potentially want to clear the players inventory too, I may need an update method
+        List<Item> droppedItems = new ArrayList<>((Collection) inventory);
+        inventory.clear();
+        return droppedItems;
     }
 
-    public void addToInventory(Item loot) {
-        inventory.add(loot);
+    public boolean hasPlot(){
+        return plot!= null;
+    }
+    public void setPlot(Plot plot) {
+        this.plot = plot;
+    }
+    public Plot getPlot() {
+        return plot;
+    }
+
+    public void upgradeRankIfEligible(){
+
     }
 
     @Override

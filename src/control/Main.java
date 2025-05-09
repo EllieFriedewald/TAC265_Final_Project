@@ -3,6 +3,7 @@ package control;
 import model.*;
 import view.*;
 
+import javax.crypto.spec.RC2ParameterSpec;
 import javax.swing.*;
 import java.util.*;
 
@@ -145,9 +146,9 @@ public class Main {
     }
 
     private Map<BlockType, List<Item>> getItemDropByBlockType(){
-        ArrayList<Item> items = ItemFileReader.readItems();
+        Map<String, Item> items = ItemFileReader.readItems();
         Map<BlockType, List<Item>> dropMap = new HashMap<>();
-        for(Item item : items){
+        for(Item item : items.values()){
             BlockType block = item.getDropSource();
             dropMap.putIfAbsent(block, new ArrayList<>());
             dropMap.get(block).add(item);
@@ -174,9 +175,118 @@ public class Main {
         Item loot = getItemDrop(minedBlock);
         ui.println("You found and mined a " + minedBlock + " block!");
         if(loot != null){
-            loggedInPlayer.addToInventory(loot);
+            loggedInPlayer.addItem(loot);
             ui.println("From mining the " + minedBlock + " you get: " + loot.toString());
         }
     }
+
+    private void showInventory(){
+        ui.println("--=== Inventory ===--");
+        Map<String, Integer> itemCount = loggedInPlayer.getInventory();
+        final int rows = 4;
+        final int cols = 9;
+        final int totSlots = rows * cols;
+
+        List<String> sortedNames = new ArrayList<>(itemCount.keySet());
+        Collections.sort(sortedNames);
+
+        List<String> cells = new ArrayList<>();
+        for(String name : sortedNames){
+            int count = itemCount.get(name);
+            String cell = String.format("[%1$-10s]", name + "x" + count); // looked up different formatting options here so i could get one that i liked!
+            cells.add(cell);
+        }
+
+        while(cells.size() < totSlots){ // filling the rest of the inventory with empty slots so that it will show full grid
+            cells.add(String.format("[%1$-10s]", "Empty"));
+        }
+        // actually printing out the grid
+        for(int i = 0; i < totSlots; i++){
+            ui.print(cells.get(i) + " ");
+            if((i+1) % cols == 0){ // mod so we can get even rows and cols, if 0 then make a new row!
+                ui.print("\n");
+            }
+        }
+    }
+
+    private Recipe getSelectedRecipe(ArrayList<Recipe> recipes){
+        int choice = ui.readInt("Choose a recipe number: ", 1, recipes.size());
+        return recipes.get(choice);
+    }
+
+    private void showRecipes(ArrayList<Recipe> recipes){
+        String acc = "--=== Recipes ===--";
+        int counter = 1;
+        for(Recipe recipe: recipes){
+            acc += counter + ". " + recipe.toString() + "\n";
+        }
+    }
+
+    private void craftItem(Recipe recipe){
+        if(loggedInPlayer.hasEnoughItems(recipe)){
+            ArrayList<Item> ingredients = recipe.getIngredients();
+            for(Item ingredient : ingredients){
+                loggedInPlayer.removeItem(ingredients);
+            }
+            loggedInPlayer.addItem(recipe.getItemCrafted());
+        }
+        else{
+            ui.println("You don't have enough items in your inventory to craft "+ recipe +"!");
+        }
+    }
+
+    private void makePlot(){
+        if(!loggedInPlayer.hasPlot()){
+            Plot p = new Plot(loggedInPlayer);
+            loggedInPlayer.setPlot(p);
+            ui.println("A plot has successfully been added to your user!");
+        }
+        else{
+            ui.println("You already have a plot!");
+        }
+    }
+
+    private void addPlayerToPlot(Player p){
+        if(!loggedInPlayer.hasPlot()){
+            ui.println("You cannot add a user to your plot because you have no plots! Please make a plot for yourself!");
+        }
+        else{
+            String otherUser = ui.readln("Please enter the username of the player you wish to add to your plot: ");
+
+            Player other = playerMap.get(otherUser);
+            if(other == null){
+                ui.println("There is no player with that username!");
+            }
+            else{
+                loggedInPlayer.getPlot().addPlayer(other);
+            }
+        }
+    }
+    private void removePlayerFromPlot(Player p){
+        if(!loggedInPlayer.hasPlot()){
+            ui.println("You cannot remove a user from your plot because you have no plots! Please make a plot for yourself!");
+        }
+        else{
+            String user = ui.readln("Please enter the username of the player you wish to remove: ");
+            Player userPlayer = playerMap.get(user);
+            if(userPlayer == null){
+                ui.println("There is no player with that username!");
+            }
+            else{
+                loggedInPlayer.getPlot().removePlayer(userPlayer);
+            }
+        }
+    }
+
+    private void buildOnPlot(){
+
+    }
+
+    public void quit(){
+        PlayerDatabaseSaver.writeObjectToFile(playerMap, DB_FILE);
+        ui.println("Quitting...");
+        System.exit(1);
+    }
+
 
 }

@@ -1,0 +1,48 @@
+itemToCraft	ingredient1	ingredient2	ingredient3	ingredient4	ingredient5	ingredient6	ingredient7	ingredient8	ingredient9
+stick	plank	plank
+plank	oak wood
+crafting_table	plank	plank	plank	plank
+stone_pickaxe	cobble	cobble	cobble	stick	stick
+iron_pickaxe	iron ore	iron ore	iron ore	stick	stick
+diamond_pickaxe	diamond ore	diamond ore	diamond ore	stick	stick
+iron_sword	iron ore	iron ore	stick
+diamond_sword	diamond ore	diamond ore	stick
+furnace	cobble	cobble	cobble	cobble	cobble	cobble	cobble	cobble
+torch	coal	stick
+glass	sand	sand	sand	sand
+leather_helmet	leather	leather	leather		leather
+leather_chestplate	leather	leather	leather	leather	leather	leather	leather	leather
+leather_leggings	leather	leather	leather	leather		leather	leather
+leather_boots	leather		leather			leather		leather
+iron_helmet	iron ore	iron ore	iron ore		iron ore	iron ore
+iron_chestplate	iron ore	iron ore	iron ore	iron ore	iron ore	iron ore	iron ore	iron ore
+iron_leggings	iron ore	iron ore	iron ore	iron ore		iron ore	iron ore
+iron_boots	iron ore		iron ore			iron ore		iron ore
+gold_helmet	gold ore	gold ore	gold ore		gold ore	gold ore
+gold_chestplate	gold ore	gold ore	gold ore	gold ore	gold ore	gold ore	gold ore	gold ore
+gold_leggings	gold ore	gold ore	gold ore	gold ore		gold ore	gold ore
+gold_boots	gold ore		gold ore			gold ore		gold ore
+diamond_helmet	diamond ore	diamond ore	diamond ore		diamond ore	diamond ore
+diamond_chestplate	diamond ore	diamond ore	diamond ore	diamond ore	diamond ore	diamond ore	diamond ore	diamond ore
+diamond_leggings	diamond ore	diamond ore	diamond ore	diamond ore		diamond ore	diamond ore
+diamond_boots	diamond ore		diamond ore			diamond ore		diamond ore
+shield	plank	plank	plank	plank	iron ore	plank	plank
+bow	stick	stick	stick	string	string	string
+arrow	flint	stick	feather
+bucket	iron ore		iron ore		iron ore
+chest	plank	plank	plank	plank		plank	plank	plank
+sign	plank	plank	plank			stick
+trapdoor	plank	plank	plank	plank	plank	plank
+ladder	stick		stick	stick	stick	stick	stick		stick
+door	plank	plank	plank	plank	plank	plank
+anvil	iron ore	iron ore	iron ore		iron ore		iron ore
+enchanting_table	obsidian	diamond ore	diamond ore	book
+bookshelf	plank	plank	plank	book	book	book	plank	plank	plank
+painting	stick	stick	stick	stick	wool	stick	stick	stick
+item_frame	stick	stick	stick	stick	leather	stick	stick	stick
+map	paper	paper	paper	paper	compass	paper	paper	paper
+compass	iron ore	iron ore	iron ore	redstone	iron ore
+clock	gold ore	gold ore	gold ore	redstone	gold ore
+fishing_rod	stick	stick	stick		string		string
+flint_and_steel	flint	iron ore
+snowball	ice	ice	ice	ice
