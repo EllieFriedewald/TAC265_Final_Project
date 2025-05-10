@@ -16,15 +16,12 @@ public class Player extends Entity implements Serializable {
     public Player(){
         this("3LL13", "apple", PlayerLevel.LEATHER, 0, 100.0);
     }
-
     public Player(String username, String password, PlayerLevel level, int numPlots, double health) {
         super(username, health);
         this.password = password;
         this.level = level;
         this.numPlots = numPlots;
         this.inventory = new HashMap<>();
-        this.tools = new ArrayList<>();
-        this.selectedToolindx = 0;
     }
     public Player(String username, String password, PlayerLevel level, int numPlots) {
         this(username, password, level, numPlots, 100.0);
@@ -35,6 +32,7 @@ public class Player extends Entity implements Serializable {
     public Player(String username, String password) {
         this(username, password, PlayerLevel.LEATHER, 0, 100.0);
     }
+
 
     public String getPassword() {
         return password;
@@ -57,19 +55,36 @@ public class Player extends Entity implements Serializable {
     public String getUsername() {
         return username;
     }
-
+    public void setInventory(Map<String, Integer> inventory) {
+        this.inventory = inventory;
+    }
+    public List<Tool> getTools() {
+        return tools;
+    }
+    public void setTools(List<Tool> tools) {
+        this.tools = tools;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public Tool getSelectedTool(){
+        if(selectedToolindx >= 0 && selectedToolindx < tools.size()){
+            return tools.get(selectedToolindx);
+        }
+        return null;
+    }
     public void addItem(Item item) {
         inventory.put(item.getName(), inventory.getOrDefault(item.getName(), 0) + 1);
     }
 
-    public boolean removeItem(List<Item> items) {
-        for(Item item : items){
-            if(!inventory.containsKey(item.getName()) || inventory.get(item.getName()) == 0){
-                return false; // not enough of this item then cant craft
-            }
+    public boolean removeItem(Item item, int quantity) {
+        String itemName = item.getName();
+        if(!inventory.containsKey(itemName) || !(inventory.get(itemName) < quantity)){
+            return false;
         }
-        for(Item item : items){
-            inventory.put(item.getName(), inventory.get(item.getName()) - 1);
+        inventory.put(itemName, inventory.get(itemName) - quantity); // decrease amount by 1
+        if(inventory.get(itemName) == 0){
+            inventory.remove(itemName); // if there are none left then remove the item completely
         }
         return true;
     }
@@ -86,12 +101,12 @@ public class Player extends Entity implements Serializable {
     public Map<String, Integer> getInventory() {
         return inventory;
     }
-    public Tool getSelectedTool(){
-        if(selectedToolindx >= 0 && selectedToolindx < tools.size()){
-            return tools.get(selectedToolindx);
-        }
-        return null;
-    }
+//    public Tool getSelectedTool(){
+//        if(selectedToolindx >= 0 && selectedToolindx < tools.size()){
+//            return tools.get(selectedToolindx);
+//        }
+//        return null;
+//    }
     /*
     This is for when the players get killed so that they drop their inventory because keepInventory = false;
      */
@@ -118,6 +133,17 @@ public class Player extends Entity implements Serializable {
     public void takeDamage(int damage){
         double newHealth = getHealth() - damage;
         setHealth(newHealth);
+    }
+
+    public boolean removeItemByName(String itemName){
+        if(!inventory.containsKey(itemName) || inventory.get(itemName) == 0){
+            return false;
+        }
+        inventory.put(itemName, inventory.get(itemName) - 1);
+        if(inventory.get(itemName) == 0){
+            inventory.remove(itemName);
+        }
+        return true;
     }
 
     @Override

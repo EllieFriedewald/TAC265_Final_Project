@@ -17,17 +17,23 @@ public class PlayerDatabaseSaver {
             System.err.println("Error caught in readInDatabaseFromFile: " + e);
             System.out.println("Couldn't read in database from file, will need to create new empty database :P");
         }
+
+        if(playerMap == null) {
+            System.out.println("Coudn't read in database from file, will need to create new empty database :-(");
+            playerMap = new HashMap<>(); //make an empty database instead of having a null
+        }
         return playerMap;
     }
     public static void writeObjectToFile(Map<String, Player> player, String fileName){
-        try (FileOutputStream fos = new FileOutputStream(fileName);ObjectOutputStream oos = new ObjectOutputStream(fos)){
-            System.out.println("\t writing to file: " + fileName);
-            oos.writeObject(player);
-        }
-        catch(FileNotFoundException e){
+        try (FileOutputStream fs = new FileOutputStream(fileName)){
+            System.out.println("\t writing to file: " + fileName); //message
+            ObjectOutputStream os = new ObjectOutputStream(fs);
+            os.writeObject(player); //write the thing to a file in a machine-readable way
+            os.close();
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        catch(IOException e){
+        catch (IOException e) {
             e.printStackTrace();
         }
     }

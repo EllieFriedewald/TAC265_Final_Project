@@ -27,6 +27,8 @@ public class Tool extends WorldObject implements Craftable {
         this.level = level;
     }
 
+
+
     public ToolType getType() {
         return toolType;
     }
@@ -37,6 +39,8 @@ public class Tool extends WorldObject implements Craftable {
         return durability;
     }
 
+
+
     @Override
     public void interact(Player player) {
         System.out.println("You are inspecting the " + toolType);
@@ -45,16 +49,17 @@ public class Tool extends WorldObject implements Craftable {
     @Override
     public Map<String, Integer> getRecipe() {
         return recipe;
-    }
+    } //CRAFTABLE INTERFACE
 
     @Override
     public String getCraftedItemName() {
         return getName();
-    }
+    } //CRAFTABLE INTERFACE
     // when you use the tool, the durability will go down by 1
     public void use(){
         durability--;
     }
+
 
     @Override
     public String toString() {

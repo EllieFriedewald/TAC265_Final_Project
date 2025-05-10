@@ -101,7 +101,6 @@ public class Main {
                     }
                 }
                 case QUIT -> {
-                    quit();
                     quit = true;
                     PlayerDatabaseSaver.writeObjectToFile(playerMap, "playerDatabase.ser");
                 }
@@ -294,22 +293,43 @@ public class Main {
     private void craftItem(){
         ArrayList<Recipe> recipes = recipeFileReader.readRecipes();
         Recipe selectedRecipe = getSelectedRecipe(recipes);
+        WorldObject crafted = selectedRecipe.getItemCrafted(); //get the item we are crafting
+        if(!(crafted instanceof Craftable craftable)){
+            ui.println("Item cannot be crafted sorry!");
+            return;
+        }
         if(loggedInPlayer.hasEnoughItems(selectedRecipe)){
-            ArrayList<Item> ingredients = selectedRecipe.getIngredients();
-            for(Item ingredient : ingredients){
-                loggedInPlayer.removeItem(ingredients);
+            for(String itemName : craftable.getRecipe().keySet()){
+                int quantity = craftable.getRecipe().get(itemName);
+                for(int i = 0; i < quantity; i++){
+                    loggedInPlayer.removeItemByName(itemName);
+                }
             }
-            loggedInPlayer.addItem(selectedRecipe.getItemCrafted());
+            if(crafted instanceof Tool tool){
+                craftTool(tool);
+            }
+            else if(crafted instanceof Item item){
+                loggedInPlayer.addItem(item);
+            }
+            else{
+                ui.println("Item cannot be crafted sorry!");
+            }
+            ui.println("You have crafted a " + crafted.getName() + "!");
         }
         else{
-            ui.println("You don't have enough items in your inventory to craft "+ selectedRecipe +"!");
+            ui.println("You don't have enough materials to craft " + crafted.getName() + ".");
         }
+    }
+    private void craftTool(Tool tool){
+        ArrayList<Recipe> recipes = recipeFileReader.readRecipes();
+        // need to do this and then im done :)
     }
 
     private void makePlot(){
         if(!loggedInPlayer.hasPlot()){
             Plot p = new Plot(loggedInPlayer);
             loggedInPlayer.setPlot(p);
+            loggedInPlayer.setNumPlots(loggedInPlayer.getNumPlots() + 1);
             ui.println("A plot has successfully been added to your user!");
         }
         else{
@@ -381,9 +401,9 @@ public class Main {
         }
     }
 
-    public void quit(){
-        PlayerDatabaseSaver.writeObjectToFile(playerMap, DB_FILE);
-        ui.println("Quitting...");
-        System.exit(1);
-    }
+//    public void quit(){
+//        PlayerDatabaseSaver.writeObjectToFile(playerMap, DB_FILE);
+//        ui.println("Quitting...");
+//        System.exit(1);
+//    }
 }
