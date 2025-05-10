@@ -27,6 +27,9 @@ public class ItemFileReader {
     }
     //String name, boolean canPickUp, String description
     private static Item parseLine(String line){
+        if(line.isEmpty()) {
+            throw new IllegalArgumentException("Line is empty");
+        }
         Scanner ls = new Scanner(line);
         ls.useDelimiter("\t");
         String name = ls.next();

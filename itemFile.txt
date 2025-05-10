@@ -1,0 +1,59 @@
+name	canPickUp	description	from
+dirt	yes	"A basic block found almost everywhere. Not very useful, but great for filling holes."	grass
+grass	no	A layer of green-covered dirt. Looks nice on top but breaks down to dirt when mined.	grass
+stone	no	"A solid gray block found underground. When mined without silk touch, it turns into cobble. A staple for building and crafting."	stone
+sand	yes	"A loose and fragile block, often found in deserts or beaches. Useful for crafting glass."	sand
+cobble	yes	Rough stone collected when mining regular stone. Common and versatile building material.	cobblestone
+oak wood	yes	Strong wood from oak trees. Can be crafted into planks and tools.	oak_wood
+leaves	no	Fluffy blocks from tree canopies. Occasionally drop saplings or apples when broken.	leaves
+iron ore	yes	A grayish block containing valuable iron. Smelt it to craft strong tools and armor.	iron_ore
+gold ore	yes	"A shiny, rare block that yields gold when smelted. Useful for advanced crafting."	gold_ore
+diamond	yes	"The most prized block. Extremely rare, yields diamonds for top-tier gear."	diamond_ore
+bedrock	no	The indestructible foundation of the world. Cannot be mined or moved.	bedrock
+sapling	yes	A start of a tree	leaves
+apple	yes	Yummy food	leaves
+stick	yes	A simple crafting essential; the backbone of tools.	air
+plank	yes	Processed wood used for building and crafting.	air
+crafting table	yes	Unlocks your full crafting potential.	air
+stone pickaxe	yes	Smelt ores and cook food with this fiery cube.	air
+iron pickaxe	yes	Basic pickaxe made of stone; can mine iron and below.	air
+diamond pickaxe	yes	Strong and reliable; can mine diamond and more.	air
+iron sword	yes	A sharp blade forged in iron.	air
+diamond sword	yes	The pinnacle of melee power.	air
+furnace	yes	Smelt ores and cook food with this fiery cube.	air
+torch	yes	Lights up dark places and keeps mobs away.	air
+glass	yes	Clear block for windows and decoration.	air
+leather helmet	yes	Basic head protection.	air
+leather chestplate	yes	Light armor for your torso.	air
+leather leggings	yes	Offers minimal leg protection.	air
+leather boots	yes	Soft footwear for light exploration.	air
+iron helmet	yes	Stronger headgear made from iron.	air
+iron chestplate	yes	Durable protection for your upper body.	air
+iron leggings	yes	Reinforced pants for solid defense.	air
+iron boots	yes	Solid foot protection.	air
+gold helmet	yes	Fancy but fragile headgear.	air
+gold chestplate	yes	Flashy torso armor with lower durability.	air
+gold leggings	yes	Stylish leg protection with less strength.	air
+gold boots	yes	Golden footwear—style over substance.	air
+diamond helmet	yes	Top-tier head protection.	air
+diamond chestplate	yes	The strongest torso armor.	air
+diamond leggings	yes	Ultimate leg defense.	air
+diamond boots	yes	The best boots in the game.	air
+shield	yes	Blocks incoming attacks to keep you safe.	air
+bow	yes	Ranged weapon to strike from afar.	air
+arrow	yes	Ammunition for your bow; aim true!	air
+bucket	yes	"Carries water, lava, or even milk."	air
+chest	yes	Stores all your extra items.	air
+sign	yes	Leave messages or label your builds.	air
+trapdoor	yes	A wooden hatch for stealthy entrances.	air
+ladder	yes	Climb vertically with ease.	air
+door	yes	Opens and closes your home to the world.	air
+anvil	yes	Combine and repair items or apply enchantments.	air
+bookshelf	yes	Boosts enchanting power when near enchanting tables.	air
+painting	yes	Adds some flair to your walls.	air
+item frame	yes	Display your favorite item proudly.	air
+map	yes	A view of the world in your hands.	air
+compass	yes	Always points to your spawn point.	air
+fishing rod	yes	Cast a line and reel in treasure—or dinner.	air
+flint and steel	yes	Sparks flame; useful and dangerous.	air
+snowball	yes	"Fun to throw, and can push enemies back."	air

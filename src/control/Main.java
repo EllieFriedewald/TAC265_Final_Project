@@ -5,6 +5,7 @@ import view.*;
 
 import javax.crypto.spec.RC2ParameterSpec;
 import javax.swing.*;
+import java.io.File;
 import java.util.*;
 
 public class Main {
@@ -16,10 +17,24 @@ public class Main {
     private static final String DB_FILE = "playerDatabase.ser";
 
     public Main(){
-        playerMap = PlayerDatabaseSaver.readInDatabaseFromFile(DB_FILE);
-        itemMap = (Map<String, Item>) ItemFileReader.readItems();
+        File playerDatabase = new File(DB_FILE);
+        if(playerDatabase.exists()){
+            playerMap = PlayerDatabaseSaver.readInDatabaseFromFile(DB_FILE);
+            if(playerMap == null){
+                System.out.println("failed to read db file");
+                playerMap = new HashMap<>();
+            }
+            else{
+                System.out.println("loaded players: " + playerMap.keySet());
+            }
+        }
+        else{
+            playerMap = new HashMap<>();
+        }
+        itemMap = ItemFileReader.readItems();
         loggedInPlayer = null;
         ui = new MyIO();
+//        ui = new PopupUI("MINECRAFT");
     }
 
     public static void main(String[] args) {
@@ -39,8 +54,8 @@ public class Main {
             else{
                 option = (LoginMenu) ui.chooseFrom("Pick something you'd like to do!", (Object[])LoginMenu.values());
             }
-
             switch (option){
+                case CREATE_ACCOUNT -> createAccount();
                 case LOGIN -> login();
                 case LOGOUT -> loggedInPlayer = null;
                 case DISPLAY_USERS -> displayUsers();
@@ -81,9 +96,13 @@ public class Main {
                     }
                 }
                 case QUIT -> {
+                    quit();
                     quit = true;
-                    PlayerDatabaseSaver.writeObjectToFile(playerMap, DB_FILE);
+                    PlayerDatabaseSaver.writeObjectToFile(playerMap, "playerDatabase.ser");
                 }
+            }
+            if (!quit) { //pause
+                if(ui instanceof MyIO) ui.readln("enter something to continue");
             }
         }
     }
@@ -94,28 +113,71 @@ public class Main {
     private void logout(){
         loggedInPlayer = null;
     }
+    //start
+    private String getUsername() {
+        boolean login = false;
+        String username = ui.readln("What would you like your username to be?");
+        if(username == null || playerMap.containsKey(username)) {
+            login = ui.readYesOrNo("That user is already taken would you like to login?");
+            if(login) {
+                login();
+                return null;
+            }
+        }
+        return username;
+    }
+
+    public void createAccount() {
+        String username = getUsername();
+        if(!playerMap.containsKey(username) && username != null) {
+            String password = ui.readln("What would you like your password to be?");
+            String confirmPass = ui.readln("Please retype your password to confirm it: ");
+            if (!password.equals(confirmPass)) {
+                ui.println("Sorry! Your account was not created, because the passwords did not match.");
+            } else {
+                PlayerLevel level = PlayerLevel.LEATHER;
+                double health = 100.0;
+                int numPlots = 0;
+                Player newPlayer = new Player(username, password, level, numPlots, health);
+                playerMap.put(username, newPlayer);
+                loggedInPlayer = newPlayer;
+                ui.println("Your account has successfully been created! Welcome" + username + ". Please now login to your account.");
+            }
+        }
+        else{
+            String prompt = ui.readln("This username has already been created. Would you like to try a different username or login to an existing account? type: different or login... " );
+            if(prompt.equalsIgnoreCase("different")){
+                createAccount();
+            }
+            else if(prompt.equalsIgnoreCase("login")){
+                login();
+            }
+        }
+    }
 
     private void login(){
         if(loggedInPlayer != null){
             logout();
         }
-        else{
-            String username = ui.readln("Please enter your username: ");
-            if(playerMap.containsKey(username)){
-                Player player = playerMap.get(username);
-                String password = ui.readln("Please enter your password: ");
-                if(player.getPassword().equals(password)){
-                    loggedInPlayer = player;
-                }
-                else{
-                    ui.println("Incorrect password!");
-                }
+        String username = ui.readln("Please enter your username: ");
+        if(playerMap.containsKey(username)) {
+            Player player = playerMap.get(username);
+            String password = ui.readln("Please enter your password: ");
+
+            if (player.getPassword().equals(password)) {
+                loggedInPlayer = player;
+                ui.println("Your account has successfully been logged in! Welcome back " + username);
+            } else {
+                ui.println("Incorrect password!");
             }
+        }
+        else {
+            ui.println("No account found with that username.");
         }
     }
 
     private void displayUsers(){
-        String acc = "All Users: ";
+        String acc = "All Users:\n";
         int counter = 1;
         for(String player : playerMap.keySet()){
             acc += counter + ". " + player + "\n";
@@ -125,7 +187,7 @@ public class Main {
     }
 
     private void displayStatus(){
-        String acc = "All User Status: ";
+        String acc = "All User Status:\n";
         int counter = 1;
         for(Player player : playerMap.values()){
             acc += counter + ". " + player.toString() + "\n";
@@ -163,6 +225,7 @@ public class Main {
                 items.add(item);
             }
         }
+        ui.println("Items that drop from " + sourceBlock + ": " + items);
         if(items.isEmpty()){
             return null;
         }
@@ -211,7 +274,7 @@ public class Main {
 
     private Recipe getSelectedRecipe(ArrayList<Recipe> recipes){
         int choice = ui.readInt("Choose a recipe number: ", 1, recipes.size());
-        return recipes.get(choice);
+        return recipes.get(choice - 1); // corrected indexing
     }
 
     private void showRecipes(ArrayList<Recipe> recipes){
@@ -220,18 +283,21 @@ public class Main {
         for(Recipe recipe: recipes){
             acc += counter + ". " + recipe.toString() + "\n";
         }
+        ui.println(acc);
     }
 
-    private void craftItem(Recipe recipe){
-        if(loggedInPlayer.hasEnoughItems(recipe)){
-            ArrayList<Item> ingredients = recipe.getIngredients();
+    private void craftItem(){
+        ArrayList<Recipe> recipes = recipeFileReader.readRecipes();
+        Recipe selectedRecipe = getSelectedRecipe(recipes);
+        if(loggedInPlayer.hasEnoughItems(selectedRecipe)){
+            ArrayList<Item> ingredients = selectedRecipe.getIngredients();
             for(Item ingredient : ingredients){
                 loggedInPlayer.removeItem(ingredients);
             }
-            loggedInPlayer.addItem(recipe.getItemCrafted());
+            loggedInPlayer.addItem(selectedRecipe.getItemCrafted());
         }
         else{
-            ui.println("You don't have enough items in your inventory to craft "+ recipe +"!");
+            ui.println("You don't have enough items in your inventory to craft "+ selectedRecipe +"!");
         }
     }
 
@@ -246,7 +312,7 @@ public class Main {
         }
     }
 
-    private void addPlayerToPlot(Player p){
+    private void addPlayerToPlot(){
         if(!loggedInPlayer.hasPlot()){
             ui.println("You cannot add a user to your plot because you have no plots! Please make a plot for yourself!");
         }
@@ -262,24 +328,34 @@ public class Main {
             }
         }
     }
-    private void removePlayerFromPlot(Player p){
+    private void removePlayerFromPlot(){
         if(!loggedInPlayer.hasPlot()){
             ui.println("You cannot remove a user from your plot because you have no plots! Please make a plot for yourself!");
         }
         else{
-            String user = ui.readln("Please enter the username of the player you wish to remove: ");
-            Player userPlayer = playerMap.get(user);
-            if(userPlayer == null){
+            String other = ui.readln("Please enter the username of the player you wish to remove: ");
+            Player otherPlayer = playerMap.get(other);
+            if(otherPlayer == null){
                 ui.println("There is no player with that username!");
             }
             else{
-                loggedInPlayer.getPlot().removePlayer(userPlayer);
+                loggedInPlayer.getPlot().removePlayer(otherPlayer);
             }
         }
     }
 
     private void buildOnPlot(){
-
+        Plot plot = loggedInPlayer.getPlot();
+        if(!loggedInPlayer.hasPlot()){
+            ui.println("You do not have a plot to build on because you have no plots!");
+        }
+        else if(!plot.getOwner().equals(loggedInPlayer) && !plot.getAllowedPlayers().contains(loggedInPlayer)){
+            ui.println("You do not have permission to build on this plot!");
+        }
+        else{
+            plot.build();
+            ui.println("You have successfully built a house on your plot!");
+        }
     }
 
     public void quit(){
@@ -287,6 +363,4 @@ public class Main {
         ui.println("Quitting...");
         System.exit(1);
     }
-
-
 }

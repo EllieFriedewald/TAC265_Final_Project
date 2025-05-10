@@ -13,6 +13,10 @@ public class Player extends Entity implements Serializable {
     private Plot plot;
     private int selectedToolindx;
 
+    public Player(){
+        this("3LL13", "apple", PlayerLevel.LEATHER, 0, 100.0);
+    }
+
     public Player(String username, String password, PlayerLevel level, int numPlots, double health) {
         super(username, health);
         this.password = password;
@@ -22,15 +26,14 @@ public class Player extends Entity implements Serializable {
         this.tools = new ArrayList<>();
         this.selectedToolindx = 0;
     }
-
-    public Player(String name, String password, int numPlots) {
-        super(name);
-        this.password = password;
-        level = PlayerLevel.LEATHER;
-        this.numPlots = numPlots;
-        this.inventory = new HashMap<>();
-        this.tools = new ArrayList<>();
-        this.selectedToolindx = 0;
+    public Player(String username, String password, PlayerLevel level, int numPlots) {
+        this(username, password, level, numPlots, 100.0);
+    }
+    public Player(String username, String password, PlayerLevel level) {
+        this(username, password, level, 0);
+    }
+    public Player(String username, String password) {
+        this(username, password, PlayerLevel.LEATHER, 0, 100.0);
     }
 
     public String getPassword() {
@@ -50,6 +53,9 @@ public class Player extends Entity implements Serializable {
     }
     public void setNumPlots(int numPlots) {
         this.numPlots = numPlots;
+    }
+    public String getUsername() {
+        return username;
     }
 
     public void addItem(Item item) {
@@ -105,9 +111,9 @@ public class Player extends Entity implements Serializable {
         return plot;
     }
 
-    public void upgradeRankIfEligible(){
-
-    }
+//    public void upgradeRankIfEligible(){
+//
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -123,6 +129,6 @@ public class Player extends Entity implements Serializable {
 
     @Override
     public String toString() {
-        return username + ", is ranked " + level + " and they have " + numPlots + " plots";
+        return getName() + ", is ranked " + level + " and they have " + numPlots + " plots";
     }
 }

@@ -23,11 +23,9 @@ public class PlayerDatabaseSaver {
         return playerMap;
     }
     public static void writeObjectToFile(Map<String, Player> player, String fileName){
-        try (FileOutputStream fos = new FileOutputStream(fileName)){
+        try (FileOutputStream fos = new FileOutputStream(fileName);ObjectOutputStream oos = new ObjectOutputStream(fos)){
             System.out.println("\t writing to file: " + fileName);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(player);
-            oos.close();
         }
         catch(FileNotFoundException e){
             e.printStackTrace();

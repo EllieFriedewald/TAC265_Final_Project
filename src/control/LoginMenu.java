@@ -1,6 +1,7 @@
 package control;
 
 public enum LoginMenu {
+    CREATE_ACCOUNT ("Create Account"),
     LOGIN ("Login"),
     LOGOUT ("logout"),
     DISPLAY_USERS ("Show all users"),

@@ -1,7 +1,8 @@
 package model;
+import java.io.Serializable;
 import java.util.*;
 
-public class Plot {
+public class Plot implements Serializable {
 
     private Player owner;
     private List<Player> allowedPlayers;
@@ -12,6 +13,19 @@ public class Plot {
         this.allowedPlayers = new ArrayList<>();
         this.hasBuild = false;
     }
+
+    public Player getOwner() {
+        return owner;
+    }
+
+    public List<Player> getAllowedPlayers() {
+        return allowedPlayers;
+    }
+
+    public boolean isHasBuild() {
+        return hasBuild;
+    }
+
     public void build(){
         if(!hasBuild){
             hasBuild = true;

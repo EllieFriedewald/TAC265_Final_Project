@@ -11,7 +11,8 @@ public enum BlockType {
     IRON_ORE(7),
     GOLD_ORE (6),
     DIAMOND_ORE (3),
-    BEDROCK (1);
+    BEDROCK (1),
+    AIR(0);
 
     private final int weight;
     private BlockType(int weight) {
