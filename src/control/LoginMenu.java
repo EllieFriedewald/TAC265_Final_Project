@@ -13,6 +13,7 @@ public enum LoginMenu {
     ADD_PLAYER("Add a player to your plot"),
     REMOVE_PLAYER ("Remove a player from your plot"),
     BUILD ("Build a building on your plot"),
+    ATTACK("attack"),
     QUIT ("Save and quit to tile");
 
     private final String option;

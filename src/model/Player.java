@@ -112,8 +112,13 @@ public class Player extends Entity implements Serializable {
     }
 
 //    public void upgradeRankIfEligible(){
-//
+// VERSION 2
 //    }
+
+    public void takeDamage(int damage){
+        double newHealth = getHealth() - damage;
+        setHealth(newHealth);
+    }
 
     @Override
     public boolean equals(Object o) {

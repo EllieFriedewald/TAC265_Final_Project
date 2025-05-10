@@ -3,42 +3,45 @@ package model;
 import java.util.*;
 
 public class Mob extends Entity {
-    private List<Item> inventory;
-    private boolean hostile;
+    private int attackDamage;
+    private boolean isHostile;
 
-    public Mob(String name, double health, List<Item> inventory, boolean hostile) {
+    public Mob(String name, double health, boolean ishostile, int attackDamage) {
         super(name, health);
-        this.inventory = inventory;
-        this.hostile = hostile;
+        this.isHostile = ishostile;
+        this.attackDamage = attackDamage;
+
     }
-    public Mob(String name, double health) {
-        super(name, health);
-        this.inventory = new ArrayList<>(5);
-        hostile = false;
+    public Mob() {
+        super("Unknown Mob", 10.0);
+        this.attackDamage = 5;
+        this.isHostile = false;
     }
 
-    public List<Item> dropItem() {
-        return inventory;
+    @Override
+    public List<Item> dropItem(){
+        List<Item> items = new ArrayList<>();
+        items.add(new Item("Experience"));
+        return items;
     }
 
     public boolean isHostile() {
-        return hostile;
+        return isHostile;
     }
 
-    public void setHostile(boolean hostile) {
-        this.hostile = hostile;
+    public int attack(){
+        return attackDamage;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Mob mob = (Mob) o;
-        return Objects.equals(inventory, mob.inventory);
+    public void takeDamage(int damage){
+        double newHealth = getHealth() - damage;
+        setHealth(newHealth);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(inventory);
+    public boolean isAlive(){
+        return getHealth() > 0;
+    }
+    public int getAttackDamage(){
+        return attackDamage;
     }
 
     @Override

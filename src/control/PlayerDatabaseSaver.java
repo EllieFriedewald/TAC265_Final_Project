@@ -17,9 +17,6 @@ public class PlayerDatabaseSaver {
             System.err.println("Error caught in readInDatabaseFromFile: " + e);
             System.out.println("Couldn't read in database from file, will need to create new empty database :P");
         }
-        if(playerMap == null){
-            System.out.println("Couldn't read in database from file, will need to create new empty database :p");
-        }
         return playerMap;
     }
     public static void writeObjectToFile(Map<String, Player> player, String fileName){

@@ -95,6 +95,11 @@ public class Main {
                         buildOnPlot();
                     }
                 }
+                case ATTACK ->{
+                    if(playerIsLoggedIn()){
+                        attack();
+                    }
+                }
                 case QUIT -> {
                     quit();
                     quit = true;
@@ -355,6 +360,24 @@ public class Main {
         else{
             plot.build();
             ui.println("You have successfully built a house on your plot!");
+        }
+    }
+
+    private void attack(){
+        ArrayList<Mob> mobs = new ArrayList<>();
+        mobs.add(new Mob("Zombie", 50, true, 10));
+        mobs.add(new Mob("Skeleton", 50, true, 20));
+        mobs.add(new Mob("cow", 30, false, 0));
+        mobs.add(new Mob("creeper", 50, true, 95));
+        mobs.add(new Mob("pig", 50, false, 0));
+        mobs.add(new Mob("spider", 50, true, 10));
+        // -- HARD CODING MOBS v2 will have a txt file of all the list of mobs --
+        Random rand = new Random();
+        Mob randMob = mobs.get(rand.nextInt(mobs.size()));
+        ui.println("You have encountered a " + randMob.getName() + "!");
+        if(randMob.isHostile()){
+            ui.println("The " + randMob.getName() + " is hostile, and has attacked you");
+            loggedInPlayer.takeDamage(randMob.getAttackDamage());
         }
     }
 
